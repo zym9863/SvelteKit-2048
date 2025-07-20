@@ -1,38 +1,102 @@
-# sv
+# SvelteKit 2048 游戏
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+一个使用 SvelteKit 和 TypeScript 构建的经典 2048 数字拼图游戏。
 
-## Creating a project
+## 游戏特性
 
-If you're seeing this, you've probably already done this step. Congrats!
+- 🎮 经典的 2048 游戏玩法
+- ⌨️ 支持键盘控制（方向键或 WASD）
+- 🎨 精美的 UI 设计和动画效果
+- 📱 响应式设计，支持各种屏幕尺寸
+- 🏆 分数统计和游戏状态管理
+- 🔄 重新开始游戏功能
+- ✨ 胜利和失败状态提示
+
+## 游戏规则
+
+1. 使用方向键或 WASD 键移动数字方块
+2. 相同数字的方块碰撞时会合并成一个更大的数字
+3. 每次移动后会随机出现一个新的数字方块（2 或 4）
+4. 当创造出 2048 数字方块时获胜
+5. 当无法移动时游戏结束
+
+## 技术栈
+
+- [SvelteKit](https://kit.svelte.dev/) - 全栈 Web 框架
+- [TypeScript](https://www.typescriptlang.org/) - 类型安全的 JavaScript
+- [Vite](https://vitejs.dev/) - 快速的构建工具
+
+## 开发指南
+
+### 安装依赖
 
 ```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+pnpm install
 ```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### 启动开发服务器
 
 ```bash
-npm run dev
+pnpm run dev
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+# 或者启动服务器并在浏览器中打开
+pnpm run dev -- --open
 ```
 
-## Building
+### 项目结构
 
-To create a production version of your app:
+```
+src/
+├── lib/
+│   ├── game.ts              # 游戏核心逻辑
+│   ├── index.ts             # 库文件入口
+│   └── components/
+│       ├── GameBoard.svelte # 游戏面板组件
+│       └── GameCell.svelte  # 游戏单元格组件
+├── routes/
+│   ├── +layout.svelte       # 全局布局
+│   ├── +page.svelte         # 主页面
+│   └── +page.ts             # 页面数据加载
+├── app.css                  # 全局样式
+├── app.d.ts                 # TypeScript 声明文件
+└── app.html                 # HTML 模板
+```
+
+## 构建和部署
+
+### 创建生产版本
 
 ```bash
-npm run build
+pnpm run build
 ```
 
-You can preview the production build with `npm run preview`.
+### 预览生产版本
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```bash
+pnpm run preview
+```
+
+### 类型检查
+
+```bash
+pnpm run check
+
+# 或者启用监听模式
+pnpm run check:watch
+```
+
+## 游戏控制
+
+- **方向键** ↑ ↓ ← → 或 **WASD** 键控制方块移动
+- **新游戏** 按钮重新开始游戏
+- 达到 2048 后可以选择继续游戏或开始新游戏
+
+## 许可证
+
+MIT License
+
+## 贡献
+
+欢迎提交 Issue 和 Pull Request 来改进这个项目！
+
+> 如需部署到特定环境，可能需要安装相应的 [adapter](https://svelte.dev/docs/kit/adapters)。
