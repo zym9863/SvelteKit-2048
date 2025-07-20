@@ -1,3 +1,4 @@
+# [🇨🇳 中文 | 🇺🇸 English](README.md | README_EN.md)
 # SvelteKit 2048 游戏
 
 一个使用 SvelteKit 和 TypeScript 构建的经典 2048 数字拼图游戏。
