@@ -8,6 +8,10 @@
   let gameState: GameState;
   let gameContainer: HTMLDivElement;
   let highScore: number = 0;
+  
+  // 触摸控制变量
+  let touchStartX = 0;
+  let touchStartY = 0;
 
   onMount(() => {
     game = new Game2048();
@@ -25,11 +29,25 @@
     if (browser) {
       document.addEventListener('keydown', handleKeyPress);
     }
+
+    // 添加触摸事件监听
+    if (gameContainer) {
+      gameContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
+      gameContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
+      gameContainer.addEventListener('touchend', handleTouchEnd, { passive: false });
+    }
   });
 
   onDestroy(() => {
     if (browser) {
       document.removeEventListener('keydown', handleKeyPress);
+    }
+
+    // 移除触摸事件监听
+    if (gameContainer) {
+      gameContainer.removeEventListener('touchstart', handleTouchStart);
+      gameContainer.removeEventListener('touchmove', handleTouchMove);
+      gameContainer.removeEventListener('touchend', handleTouchEnd);
     }
   });
 
@@ -68,6 +86,56 @@
         updateHighScore();
       }
     }
+  }
+
+  function handleTouchStart(event: TouchEvent) {
+    touchStartX = event.touches[0].clientX;
+    touchStartY = event.touches[0].clientY;
+  }
+
+  function handleTouchMove(event: TouchEvent) {
+    // 阻止默认滚动行为
+    event.preventDefault();
+  }
+
+  function handleTouchEnd(event: TouchEvent) {
+    if (!touchStartX || !touchStartY) {
+      return;
+    }
+
+    const touchEndX = event.changedTouches[0].clientX;
+    const touchEndY = event.changedTouches[0].clientY;
+
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(deltaY);
+
+    const threshold = 30; // 滑动阈值
+
+    if (Math.max(absDeltaX, absDeltaY) > threshold) {
+      let direction: Direction | null = null;
+
+      if (absDeltaX > absDeltaY) {
+        // 水平滑动
+        direction = deltaX > 0 ? 'right' : 'left';
+      } else {
+        // 垂直滑动
+        direction = deltaY > 0 ? 'down' : 'up';
+      }
+
+      if (direction && !gameState.gameOver) {
+        const moved = game.move(direction);
+        if (moved) {
+          gameState = game.getState();
+          updateHighScore();
+        }
+      }
+    }
+    
+    // 重置触摸起始点
+    touchStartX = 0;
+    touchStartY = 0;
   }
 
   function resetGame() {
